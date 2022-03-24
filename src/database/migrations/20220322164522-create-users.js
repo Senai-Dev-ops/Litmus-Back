@@ -24,6 +24,10 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      adm:{
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },   
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

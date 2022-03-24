@@ -7,10 +7,14 @@ const app = express();
 const db = require("./src/models");
 const routes = require('./routes')
 
+
+
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(routes)
+
+
 
 const port = process.env.PORT;
 db.sequelize.sync().then(() => {

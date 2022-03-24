@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     cpf: DataTypes.STRING,
+    adm: DataTypes.BOOLEAN
   });
 
   return User;
