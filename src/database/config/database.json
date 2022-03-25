@@ -1,8 +1,8 @@
 {
     "development": {
-      "username": "root",
-      "password": "password",
-      "database": "tb_chat",
+      "username": "vsanches",
+      "password": "01050900vSg",
+      "database": "litmus-back",
       "host": "127.0.0.1",
       "dialect": "mysql"
     },
