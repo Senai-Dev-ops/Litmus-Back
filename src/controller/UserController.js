@@ -1,5 +1,7 @@
 const { User } = require('../models')
 const bcrypt = require("bcrypt")
+const { sign } = require("jsonwebtoken")
+const { validateToken } = require("../middlewares/middlewares")
 
 module.exports = {
     async createUser(req, res) {
@@ -86,7 +88,32 @@ module.exports = {
         } catch (error) {
             res.status(400).json({ error })
         }
+    },
+
+    async userAuth(req, res) {
+        try {
+            const { email, password } = req.body;
+
+            const user = await User.findOne({ where: { email: email } });
+
+            bcrypt.compare(password, user.password).then((match) => {
+                if (!match) {
+                    res.json({ error: "Usuário ou senha errados" });
+                    return;
+                }
+
+                const accessToken = sign(
+                    { name: user.name, email: email, adm: user.adm },
+                    "mySecret"
+                );
+                res.json({ token: accessToken, name: user.name, email: email, adm: user.adm });
+            });
+        } catch (error) {
+            res.status(400).json({ error })
+        }
+    },
+
+    async validToken(req, res) {
+        res.json(req.user)
     }
-
-
 }
