@@ -1,7 +1,7 @@
 {
     "development": {
-      "username": "vsanches",
-      "password": "01050900vSg",
+      "username": "root",
+      "password": "password",
       "database": "litmus-back",
       "host": "127.0.0.1",
       "dialect": "mysql"
