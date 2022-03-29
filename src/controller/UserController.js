@@ -24,11 +24,11 @@ module.exports = {
             } else {
                 bcrypt.hash(password, 10).then((hash) => {
                     User.create({ name: name, email: email, password: hash, cpf: cpf, adm: adm })
-                    res.status(200).json({ message: "Usuário criado com sucesso" })
+                    res.status(201).json({ message: "Usuário criado com sucesso" })
                 })
             }
         } catch (error) {
-            res.status(400).json({ error })
+            res.status(400).json({ error: `${error}` })
         }
     },
 
@@ -41,19 +41,19 @@ module.exports = {
 
             if (requestingUser.adm == true) {
                 if (!user) {
-                    res.status(401).json({ message: "Nenhum Usuario encontrado" })
+                    res.status(400).json({ message: "Nenhum usuário encontrado" })
                 } else {
                     bcrypt.hash(password, 10).then((hash) => {
                         User.update({ name: name, email: email, password: hash, adm: adm }, { where: { id: id } })
-                        res.status(200).json({ message: "Usuário Alterado" })
+                        res.status(202).json({ message: "Usuário Alterado" })
                     })
                 }
             } else {
-                res.status(405).json({ message: "Nao permitido" })
+                res.status(401).json({ message: "Não permitido" })
             }
 
         } catch (error) {
-            res.status(400).json({ error })
+            res.status(400).json({ error: `${error}` })
         }
     },
 
@@ -74,7 +74,7 @@ module.exports = {
                 res.status(401).json({ message: "Não permitido" })
             }
         } catch (error) {
-            res.status(400).json({ error: error })
+            res.status(400).json({ error: `${error}` })
         }
     },
 
@@ -83,11 +83,11 @@ module.exports = {
             const users = await User.findAll()
 
             if (!users) {
-                res.status(401).json({ message: "Não há usuario cadastrados" })
+                res.status(400).json({ message: "Não há usuario cadastrados" })
             }
             res.status(200).json({ users })
         } catch (error) {
-            res.status(400).json({ error })
+            res.status(400).json({ error: `${error}` })
         }
     },
 
@@ -110,7 +110,7 @@ module.exports = {
                 res.json({ token: accessToken, name: user.name, email: email, adm: user.adm });
             });
         } catch (error) {
-            res.status(400).json({ error })
+            res.status(400).json({ error: `${error}` })
         }
     },
 
