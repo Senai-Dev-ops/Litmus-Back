@@ -32,41 +32,21 @@ module.exports = {
         }
     },
 
-    async updateUserAdm(req, res) {
-        try {
-            const { id } = req.params
-            const { name, email, password, adm } = req.body
-            const user = await User.findOne({ where: { id } })
-
-            if (adm == true) {
-                if (!user) {
-                    res.status(401).json({ message: "Nenhum Usuario encontrado" })
-                } else {
-                    const user = await User.update({ name, email, password, adm }, { where: { id } })
-                    res.status(200).json({ user })
-                }
-            } else {
-                res.status(405).json({ message: "Nao permitido" })
-            }
-        } catch (error) {
-            res.status(400).json({ error })
-        }
-    },
-
-
     async updateUser(req, res) {
         try {
-            const { id } = req.params
-            const { name, email, password } = req.body
+            const { requesting_user, id } = req.params
+            const { name, email, password, adm } = req.body
             const user = await User.findOne({ where: { id } })
-            const adm = await User.findOne({ where: { adm } })
+            const requestingUser = await User.findOne({ where: { id: requesting_user } })
 
-            if (adm == True) {
+            if (requestingUser.adm == true) {
                 if (!user) {
                     res.status(401).json({ message: "Nenhum Usuario encontrado" })
                 } else {
-                    const user = await User.update({ name, email, password }, { where: { id } })
-                    res.status(200).json({ user })
+                    bcrypt.hash(password, 10).then((hash) => {
+                        User.update({ name: name, email: email, password: hash, adm: adm }, { where: { id: id } })
+                        res.status(200).json({ message: "Usuário Alterado" })
+                    })
                 }
             } else {
                 res.status(405).json({ message: "Nao permitido" })
@@ -103,7 +83,7 @@ module.exports = {
                 }
 
                 const accessToken = sign(
-                    { name: user.name, email: email, adm: user.adm },
+                    { id: user.id, name: user.name, email: email, adm: user.adm },
                     "mySecret"
                 );
                 res.json({ token: accessToken, name: user.name, email: email, adm: user.adm });

@@ -9,8 +9,7 @@ const { validateToken } = require('../middlewares/middlewares')
 router.get('/user-list', UserController.userList)
 router.get('/maquina-list', MaquinaController.maquinaList)
 
-router.patch('/user-update/:id', UserController.updateUser)
-router.patch('/user-update-adm/:id', UserController.updateUserAdm)
+router.patch('/user-update/:requesting_user/:id', UserController.updateUser)
 
 router.post('/user-create', UserController.createUser)
 router.post('/login', UserController.userAuth)
