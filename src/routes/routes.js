@@ -6,12 +6,16 @@ const UserController = require('../controller/UserController')
 const MaquinaController = require('../controller/MaquinaController')
 const { validateToken } = require('../middlewares/middlewares')
 
-router.get('/user-list', UserController.userList)
+//Machine Methods
 router.get('/maquina-list', MaquinaController.maquinaList)
 
-router.patch('/user-update/:requesting_user/:id', UserController.updateUser)
+//Users Methods
+router.get('/user-list', UserController.userList)
+router.post('/user-create', validateToken, UserController.createUser)
+router.patch('/user-update/:requesting_user/:id', validateToken, UserController.updateUser)
+router.delete('/delete-user/:requesting_user/:id', validateToken, UserController.deleteUser)
 
-router.post('/user-create', UserController.createUser)
+//Login Methods
 router.post('/login', UserController.userAuth)
 router.get('/auth', validateToken, UserController.validToken)
 

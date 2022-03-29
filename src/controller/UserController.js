@@ -57,6 +57,27 @@ module.exports = {
         }
     },
 
+    async deleteUser(req, res) {
+        try {
+            const { requesting_user, id } = req.params
+            const requestingUser = await User.findOne({ where: { id: requesting_user } })
+            const user = await User.findOne({ where: { id: id } })
+
+            if (requestingUser.adm == true) {
+                if (!user) {
+                    res.json({ message: "Usuário não existe" })
+                } else {
+                    User.destroy({ where: { id: id } })
+                    res.status(200).json({ message: "Usuário excluído" })
+                }
+            } else {
+                res.status(401).json({ message: "Não permitido" })
+            }
+        } catch (error) {
+            res.status(400).json({ error: error })
+        }
+    },
+
     async userList(req, res) {
         try {
             const users = await User.findAll()
