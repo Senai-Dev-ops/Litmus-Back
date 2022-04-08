@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const { verify } = require("jsonwebtoken");
 
 const validateToken = (req, res, next) => {
@@ -8,7 +10,7 @@ const validateToken = (req, res, next) => {
   }
 
   try {
-    const validToken = verify(accessToken, "mySecret");
+    const validToken = verify(accessToken, process.env.SECRET);
     req.user = validToken;
     if (validToken) {
       return next();

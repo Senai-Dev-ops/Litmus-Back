@@ -1,14 +1,20 @@
-const { User } = require("../database/models");
+require("dotenv").config();
+
+const { User, Logs } = require("../database/models");
 const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
-const { validateToken } = require("../middlewares/middlewares");
 
 module.exports = {
   async createUser(req, res) {
     try {
       const { name, email, password, cpf, adm } = req.body;
       const userEmail = await User.findOne({ where: { email } });
-      const userCpf = await User.findOne({ where: { cpf } });
+      const userCPF = await User.findOne({ where: { cpf } });
+
+      const { requesting_user } = req.params;
+      const requestingUser = await User.findOne({
+        where: { id: requesting_user },
+      });
 
       if (userEmail) {
         res
@@ -16,24 +22,35 @@ module.exports = {
           .json({ message: "Já existe um usuário com este email" });
         return;
       }
-      if (userCpf) {
+      if (userCPF) {
         res.status(400).json({ message: "Já existe um usuário com este cpf" });
         return;
       }
       if (name === "" || email === "" || password === "" || cpf === "") {
         res.status(400).json({ message: "Campos não podem ser nulos" });
         return;
-      } else {
-        bcrypt.hash(password, 10).then((hash) => {
-          User.create({
+      }
+      if (requestingUser.adm) {
+        bcrypt.hash(password, 10).then(async (hash) => {
+          const user = await User.create({
             name: name,
             email: email,
             password: hash,
             cpf: cpf,
             adm: adm,
           });
+          Logs.create({
+            userName: name,
+            userEmail: email,
+            createdBy: requestingUser.name,
+            updatedBy: "",
+            deletedBy: "",
+            userId: user.id,
+          });
           res.status(201).json({ message: "Usuário criado com sucesso" });
         });
+      } else {
+        res.status(401).json({ message: "Não permitido" });
       }
     } catch (error) {
       res.status(400).json({ error: `${error}` });
@@ -112,14 +129,14 @@ module.exports = {
       const user = await User.findOne({ where: { email: email } });
 
       bcrypt.compare(password, user.password).then((match) => {
-        if (!match) {
+        if (match) {
           res.json({ error: "Usuário ou senha errados" });
           return;
         }
 
         const accessToken = sign(
           { id: user.id, name: user.name, email: email, adm: user.adm },
-          "mySecret"
+          process.env.SECRET
         );
         res.json({
           token: accessToken,
