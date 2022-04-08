@@ -106,6 +106,10 @@ module.exports = {
         if (!user) {
           res.json({ message: "Usuário não existe" });
         } else {
+          await Logs.update(
+            { deletedBy: requestingUser.name },
+            { where: { userId: id } }
+          );
           User.destroy({ where: { id: id } });
           res.status(200).json({ message: "Usuário excluído" });
         }
