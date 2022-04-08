@@ -1,16 +1,14 @@
-const { Maquina } = require('../models')
+const { Maquina } = require("../database/models");
 
 module.exports = {
-    async maquinaList(req, res) {
-        try {
-            const infos = await Maquina.findAll()
+  async maquinaList(req, res) {
+    try {
+      const infos = await Maquina.findAll();
 
-            if (!infos) {
-                res.status(401).json({ message: "Não há usuario cadastrados" })
-            }
-            res.status(200).json({ infos })
-        } catch (error) {
-            
-        }
-    }
-}
+      if (!infos) {
+        res.status(401).json({ message: "Não há usuario cadastrados" });
+      }
+      res.status(200).json({ infos });
+    } catch (error) {}
+  },
+};
