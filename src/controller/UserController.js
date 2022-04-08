@@ -75,6 +75,14 @@ module.exports = {
               { name: name, email: email, password: hash, adm: adm },
               { where: { id: id } }
             );
+            Logs.update(
+              {
+                userName: name,
+                userEmail: email,
+                updatedBy: requestingUser.name,
+              },
+              { where: { userId: id } }
+            );
             res.status(202).json({ message: "Usuário Alterado" });
           });
         }
