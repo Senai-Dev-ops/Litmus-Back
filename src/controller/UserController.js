@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const { User, Logs } = require("../database/models");
+const { User } = require("../database/models");
 const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
@@ -32,20 +32,12 @@ module.exports = {
       }
       if (requestingUser.adm) {
         bcrypt.hash(password, 10).then(async (hash) => {
-          const user = await User.create({
+          User.create({
             name: name,
             email: email,
             password: hash,
             cpf: cpf,
             adm: adm,
-          });
-          Logs.create({
-            userName: name,
-            userEmail: email,
-            createdBy: requestingUser.name,
-            updatedBy: "",
-            deletedBy: "",
-            userId: user.id,
           });
           res.status(201).json({ message: "Usuário criado com sucesso" });
         });
@@ -75,14 +67,6 @@ module.exports = {
               { name: name, email: email, password: hash, adm: adm },
               { where: { id: id } }
             );
-            Logs.update(
-              {
-                userName: name,
-                userEmail: email,
-                updatedBy: requestingUser.name,
-              },
-              { where: { userId: id } }
-            );
             res.status(202).json({ message: "Usuário Alterado" });
           });
         }
@@ -106,10 +90,6 @@ module.exports = {
         if (!user) {
           res.json({ message: "Usuário não existe" });
         } else {
-          await Logs.update(
-            { deletedBy: requestingUser.name },
-            { where: { userId: id } }
-          );
           User.destroy({ where: { id: id } });
           res.status(200).json({ message: "Usuário excluído" });
         }

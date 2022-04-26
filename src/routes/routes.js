@@ -5,7 +5,6 @@ const router = Router();
 const UserController = require("../controller/UserController");
 const MaquinaController = require("../controller/MaquinaController");
 const { validateToken } = require("../middlewares/middlewares");
-const LogController = require("../controller/LogController");
 
 //Machine Methods
 router.get("/maquina-list", MaquinaController.maquinaList);
@@ -19,8 +18,5 @@ router.delete("/delete-user/:requesting_user/:id",validateToken,UserController.d
 //Login Methods
 router.post("/login", UserController.userAuth);
 router.get("/auth", validateToken, UserController.validToken);
-
-//Logs Methods
-router.get("/all-logs", LogController.getAllLogs);
 
 module.exports = router;
