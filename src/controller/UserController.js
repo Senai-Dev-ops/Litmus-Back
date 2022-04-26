@@ -121,7 +121,7 @@ module.exports = {
       const user = await User.findOne({ where: { email: email } });
 
       bcrypt.compare(password, user.password).then((match) => {
-        if (match) {
+        if (!match) {
           res.json({ error: "Usuário ou senha errados" });
           return;
         }
