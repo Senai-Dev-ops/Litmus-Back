@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     senha: DataTypes.STRING,
     cpf: DataTypes.STRING,
     tipo_de_conta: DataTypes.BOOLEAN,
-    data_nac: DataTypes.DATE,
+    data_nasc: DataTypes.DATE,
     cargo: DataTypes.STRING
   });
 
