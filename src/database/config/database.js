@@ -4,7 +4,7 @@ module.exports = {
   development: {
     username: "root",
     password: "password",
-    database: "litmus-back",
+    database: "usuario",
     host: "127.0.0.1",
     dialect: "mysql",
   },
