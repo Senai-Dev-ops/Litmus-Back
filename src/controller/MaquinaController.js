@@ -1,12 +1,12 @@
-const { Maquina } = require("../database/models");
+const { dadosMaquina } = require("../database/models");
 
 module.exports = {
   async maquinaList(req, res) {
     try {
-      const infos = await Maquina.findAll();
+      const infos = await dadosMaquina.findAll();
 
       if (!infos) {
-        res.status(401).json({ message: "Não há usuario cadastrados" });
+        res.status(401).json({ message: "Não há informções da máquina" });
       }
       res.status(200).json({ infos });
     } catch (error) {}

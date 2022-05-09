@@ -13,9 +13,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(routes);
 
 const port = process.env.PORT || 4000;
+//app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 db.sequelize.sync().then(() => {
-  console.log("Conectado ao banco de dados");
-  app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+    console.log("Conectado ao banco de dados");
+    app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 });
 
 /*
@@ -215,3 +216,106 @@ for (let i = 0; i < (lst.length); i++) {
     }
 }
 */
+//lógica para gerar dados aleatorios de rotação, avanço e temperatura
+const { dadosMaquina } = require("../src/database/models/maquina");
+async inserrr(req, res) {
+
+}
+module.exports = {
+    async insertData(req, res) {
+        
+        var sin = 1 // sinal se a máquina está ligada(1) ou desligada(0)
+        if (sin == 1) {
+            let valor = Math.floor(Math.random() * (100 - 1)) + 1
+            let valor2 = Math.floor(Math.random() * (30 - 1)) + 1
+
+            while (valor == valor2) {
+                let valor2 = Math.floor(Math.random() * (100 - 1)) + 1
+            }
+            temporiza(valor, valor2)
+            function dnv(valor) {
+                if (sin == 1) {
+                    let valor2 = Math.floor(Math.random() * (100 - 1)) + 1
+
+                    while (valor == valor2) {
+                        let valor2 = Math.floor(Math.random() * (100 - 1)) + 1
+
+                    }
+                    temporiza(valor, valor2)
+                }
+            }
+        }
+
+        function temporiza(valor, valor2) {
+            var cont = 0
+            var cont2 = Math.floor(Math.random() * (14 - 1)) + 1
+
+            inter = setInterval(function () {
+                cont++;
+                //gravar dado no bd
+                const { rotacao, avanco, temperatura } = req.body;
+                rotacao = Math.floor((80 * valor) + ((Math.random() * (100 - 1)) + 1))
+                console.log(rotacao)
+                avanco = Math.floor((0.35 * valor) + ((Math.random() * (0.4375 - 0)) + 0))
+                temperatura = 30 + (Math.floor((0.5 * valor) + ((Math.random() * (6.25 - 0)) + 0)))
+                dadosMaquina.create({
+                    rotacao: rotacao,
+                    avanco: avanco,
+                    temperatura: temperatura,
+                })
+                if (cont > cont2) {
+                    clearInterval(inter);
+                    if (valor < valor2) {
+                        var pr = valor
+
+                        var seg = valor2
+                        int = setInterval(function () {
+                            pr++;
+                            //gravar dado no bd
+                            const { rotacao, avanco, temperatura } = req.body;
+                            rotacao = Math.floor((80 * pr) + ((Math.random() * (100 - 1)) + 1))
+                            avanco = Math.floor((0.35 * pr) + ((Math.random() * (0.4375 - 0)) + 0))
+                            temperatura = 30 + (Math.floor((0.5 * pr) + ((Math.random() * (6.25 - 0)) + 0)))
+                            dadosMaquina.create({
+                                rotacao: rotacao,
+                                avanco: avanco,
+                                temperatura: temperatura,
+                            })
+                            if (pr >= seg) {
+                                let valor = seg
+                                clearInterval(int);
+                                dnv(valor)
+                            }
+                        }, 1500);//determinar em milisegundos o intervalo entre cada envio para o bd
+                    }
+                    else {
+                        var pr = valor2
+
+                        var seg = valor
+                        int = setInterval(function () {
+                            seg--;
+                            //gravar dado no bd
+                            const { rotacao, avanco, temperatura } = req.body;
+                            rotacao = Math.floor((80 * seg) + ((Math.random() * (100 - 1)) + 1))
+                            avanco = Math.floor((0.35 * seg) + ((Math.random() * (0.4375 - 0)) + 0))
+                            temperatura = 30 + (Math.floor((0.5 * seg) + ((Math.random() * (6.25 - 0)) + 0)))
+                            dadosMaquina.create({
+                                rotacao: rotacao,
+                                avanco: avanco,
+                                temperatura: temperatura,
+                            })
+                            if (seg <= pr) {
+                                let valor = pr
+                                clearInterval(int);
+                                dnv(valor)
+                            }
+                        }, 1500);//determinar em milisegundos o intervalo entre cada envio para o bd
+                    }
+                }
+            }, 1500);//determinar em milisegundos o intervalo entre cada envio para o bd
+
+        }
+    }
+}
+
+

@@ -1,27 +1,23 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Maquinas", {
+    await queryInterface.createTable("dadosMaquina", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      datahora: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
       rotacao: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
       avanco: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       temperatura: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       createdAt: {
@@ -35,6 +31,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Maquinas");
+    await queryInterface.dropTable("dadosMaquina");
   },
 };
