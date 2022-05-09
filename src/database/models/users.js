@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     cpf: DataTypes.STRING,
     adm: DataTypes.BOOLEAN,
+    data_nasc: DataTypes.DATE
   });
 
   return User;

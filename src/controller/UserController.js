@@ -7,7 +7,7 @@ const { sign } = require("jsonwebtoken");
 module.exports = {
   async createUser(req, res) {
     try {
-      const { name, email, password, cpf, adm } = req.body;
+      const { name, email, password, cpf, adm, data_nasc } = req.body;
       const userEmail = await User.findOne({ where: { email } });
       const userCPF = await User.findOne({ where: { cpf } });
 
@@ -38,6 +38,7 @@ module.exports = {
             password: hash,
             cpf: cpf,
             adm: adm,
+            data_nasc: data_nasc
           });
           res.status(201).json({ message: "Usuário criado com sucesso" });
         });
@@ -52,7 +53,7 @@ module.exports = {
   async updateUser(req, res) {
     try {
       const { requesting_user, id } = req.params;
-      const { name, email, password, adm } = req.body;
+      const { name, email, password, adm, data_nasc } = req.body;
       const user = await User.findOne({ where: { id } });
       const requestingUser = await User.findOne({
         where: { id: requesting_user },
@@ -64,7 +65,7 @@ module.exports = {
         } else {
           bcrypt.hash(password, 10).then((hash) => {
             User.update(
-              { name: name, email: email, password: hash, adm: adm },
+              { name: name, email: email, password: hash, adm: adm, data_nasc: data_nasc },
               { where: { id: id } }
             );
             res.status(202).json({ message: "Usuário Alterado" });
@@ -135,6 +136,7 @@ module.exports = {
           name: user.name,
           email: email,
           adm: user.adm,
+          id: user.id
         });
       });
     } catch (error) {
