@@ -251,14 +251,14 @@ function temporiza(valor, valor2) {
         console.log("\nRotação atual: ", Math.floor((80 * valor) + ((Math.random() * (100 - 1)) + 1)))     
         console.log("\nAvanço: ", Math.floor((0.35 * valor) + ((Math.random() * (0.4375 - 0)) + 0)))
         console.log("\nTemperatura: ", 30 + (Math.floor((0.5 * valor) + ((Math.random() * (6.25 - 0)) + 0))))
-        //let data = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
-        //console.log(typeof(data))
+        let data = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+        console.log(data)
         //console.log(data)
         Maquina.create({
             rotacao: Math.floor((80 * valor) + ((Math.random() * (100 - 1)) + 1)),
             avanco: Math.floor((0.35 * valor) + ((Math.random() * (0.4375 - 0)) + 0)),
             temperatura: 30 + (Math.floor((0.5 * valor) + ((Math.random() * (6.25 - 0)) + 0))),
-            datahora: new Date(),
+            datahora: data.toString(),
         })
 
         if (cont > cont2) {
@@ -273,12 +273,12 @@ function temporiza(valor, valor2) {
                     console.log("\nRotação atual: ", Math.floor((80 * pr) + ((Math.random() * (1000 - 1)) + 1)))
                     console.log("\nAvanço: ", Math.floor((0.35 * pr) + ((Math.random() * (4.375 - 1)) + 1)))
                     console.log("\nTemperatura: ", 30 + (Math.floor((0.5 * pr) + ((Math.random() * (6.25 - 0)) + 0))))
-                    //let data = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+                    let data = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
                     Maquina.create({
                         rotacao: Math.floor((80 * pr) + ((Math.random() * (1000 - 1)) + 1)),
                         avanco: Math.floor((0.35 * pr) + ((Math.random() * (4.375 - 1)) + 1)),
                         temperatura: 30 + (Math.floor((0.5 * pr) + ((Math.random() * (6.25 - 0)) + 0))),
-                        datahora: new Date(),
+                        datahora: data.toString(),
                     })
                     if (pr >= seg) {
                         let valor = seg
@@ -297,12 +297,12 @@ function temporiza(valor, valor2) {
                     console.log("\nRotação atual: ", Math.floor((80 * seg) + ((Math.random() * (1000 - 1)) + 1)))
                     console.log("\nAvanço: ", Math.floor((0.35 * seg) + ((Math.random() * (4.375 - 1)) + 1)))
                     console.log("\nTemperatura: ", 30 + (Math.floor((0.5 * seg) + ((Math.random() * (6.25 - 0)) + 0))))
-                    //let data = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+                    let data = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
                     Maquina.create({
                         rotacao: Math.floor((80 * seg) + ((Math.random() * (1000 - 1)) + 1)),
                         avanco: Math.floor((0.35 * seg) + ((Math.random() * (4.375 - 1)) + 1)),
                         temperatura: 30 + (Math.floor((0.5 * seg) + ((Math.random() * (6.25 - 0)) + 0))),
-                        datahora: new Date,
+                        datahora: data.toString(),
                     })
                     if (seg <= pr) {
                         let valor = pr
