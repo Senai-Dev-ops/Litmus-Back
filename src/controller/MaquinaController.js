@@ -1,9 +1,9 @@
-const { dadosMaquina } = require("../database/models");
+const { Maquina } = require("../database/models");
 
 module.exports = {
   async maquinaList(req, res) {
     try {
-      const infos = await dadosMaquina.findAll();
+      const infos = await Maquina.findAll();
 
       if (!infos) {
         res.status(401).json({ message: "Não há informções da máquina" });

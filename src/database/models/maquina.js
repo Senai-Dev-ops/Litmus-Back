@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const dadosMaquina = sequelize.define("dadosMaquina", {
+  const Maquina = sequelize.define("Maquina", {
     rotacao: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -13,9 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    datahora: {
+      type: DataTypes.DATE,
+      allowNull: false
+    }
   }, {
     timestamps: false,
   });
 
-  return dadosMaquina;
+  return Maquina;
 };
