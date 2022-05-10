@@ -1,18 +1,18 @@
 require("dotenv").config();
 
-const { User } = require("../database/models");
+const { usuarios } = require("../database/models");
 const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
 module.exports = {
   async createUser(req, res) {
     try {
-      const { name, email, password, cpf, adm } = req.body;
-      const userEmail = await User.findOne({ where: { email } });
-      const userCPF = await User.findOne({ where: { cpf } });
+      const { nome, email, senha, CPF, ADM } = req.body;
+      const userEmail = await usuarios.findOne({ where: { email } });
+      const userCPF = await usuarios.findOne({ where: { CPF } });
 
       const { requesting_user } = req.params;
-      const requestingUser = await User.findOne({
+      const requestingUser = await usuarios.findOne({
         where: { id: requesting_user },
       });
 
@@ -23,21 +23,22 @@ module.exports = {
         return;
       }
       if (userCPF) {
-        res.status(400).json({ message: "Já existe um usuário com este cpf" });
+        res.status(400).json({ message: "Já existe um usuário com este CPF" });
         return;
       }
-      if (name === "" || email === "" || password === "" || cpf === "") {
+      if (nome === "" || email === "" || senha === "" || CPF === "" || DATANASC === "") {
         res.status(400).json({ message: "Campos não podem ser nulos" });
         return;
       }
-      if (requestingUser.adm) {
-        bcrypt.hash(password, 10).then(async (hash) => {
-          User.create({
-            name: name,
+      if (requestingUser.ADM) {
+        bcrypt.hash(senha, 10).then(async (hash) => {
+          usuarios.create({
+            nome: nome,
             email: email,
-            password: hash,
-            cpf: cpf,
-            adm: adm,
+            senha: hash,
+            CPF: CPF,
+            ADM: ADM,
+            DATANASC: DATANASC,
           });
           res.status(201).json({ message: "Usuário criado com sucesso" });
         });
@@ -52,19 +53,19 @@ module.exports = {
   async updateUser(req, res) {
     try {
       const { requesting_user, id } = req.params;
-      const { name, email, password, adm } = req.body;
-      const user = await User.findOne({ where: { id } });
-      const requestingUser = await User.findOne({
+      const { nome, email, senha, ADM, DATANASC } = req.body;
+      const user = await usuarios.findOne({ where: { id } });
+      const requestingUser = await usuarios.findOne({
         where: { id: requesting_user },
       });
 
-      if (requestingUser.adm == true) {
+      if (requestingUser.ADM == true) {
         if (!user) {
           res.status(400).json({ message: "Nenhum usuário encontrado" });
         } else {
-          bcrypt.hash(password, 10).then((hash) => {
-            User.update(
-              { name: name, email: email, password: hash, adm: adm },
+          bcrypt.hash(senha, 10).then((hash) => {
+            usuarios.update(
+              { nome: nome, email: email, senha: hash, ADM: ADM, DATANASC: DATANASC },
               { where: { id: id } }
             );
             res.status(202).json({ message: "Usuário Alterado" });
@@ -81,16 +82,16 @@ module.exports = {
   async deleteUser(req, res) {
     try {
       const { requesting_user, id } = req.params;
-      const requestingUser = await User.findOne({
+      const requestingUser = await usuarios.findOne({
         where: { id: requesting_user },
       });
-      const user = await User.findOne({ where: { id: id } });
+      const user = await usuarios.findOne({ where: { id: id } });
 
-      if (requestingUser.adm == true) {
+      if (requestingUser.ADM == true) {
         if (!user) {
           res.json({ message: "Usuário não existe" });
         } else {
-          User.destroy({ where: { id: id } });
+          usuarios.destroy({ where: { id: id } });
           res.status(200).json({ message: "Usuário excluído" });
         }
       } else {
@@ -103,7 +104,7 @@ module.exports = {
 
   async userList(req, res) {
     try {
-      const users = await User.findAll();
+      const users = await usuarios.findAll();
 
       if (!users) {
         res.status(400).json({ message: "Não há usuario cadastrados" });
@@ -116,25 +117,25 @@ module.exports = {
 
   async userAuth(req, res) {
     try {
-      const { email, password } = req.body;
+      const { email, senha } = req.body;
 
-      const user = await User.findOne({ where: { email: email } });
+      const user = await usuarios.findOne({ where: { email: email } });
 
-      bcrypt.compare(password, user.password).then((match) => {
+      bcrypt.compare(senha, user.senha).then((match) => {
         if (!match) {
           res.json({ error: "Usuário ou senha errados" });
           return;
         }
 
         const accessToken = sign(
-          { id: user.id, name: user.name, email: email, adm: user.adm },
+          { id: user.id, nome: user.nome, email: email, ADM: user.ADM },
           process.env.SECRET
         );
         res.json({
           token: accessToken,
-          name: user.name,
+          nome: user.nome,
           email: email,
-          adm: user.adm,
+          ADM: user.ADM,
         });
       });
     } catch (error) {

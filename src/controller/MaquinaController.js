@@ -6,7 +6,7 @@ module.exports = {
       const infos = await Maquina.findAll();
 
       if (!infos) {
-        res.status(401).json({ message: "Não há usuario cadastrados" });
+        res.status(401).json({ message: "Não há informções da máquina" });
       }
       res.status(200).json({ infos });
     } catch (error) {}
