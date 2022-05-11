@@ -7,13 +7,13 @@ const { sign } = require("jsonwebtoken");
 module.exports = {
   async createUser(req, res) {
     try {
-      const { nome, email, senha, CPF, ADM } = req.body;
+      const { nome, email, senha, CPF, ADM, DATANASC } = req.body;
       const userEmail = await usuarios.findOne({ where: { email } });
       const userCPF = await usuarios.findOne({ where: { CPF } });
 
       const { requesting_user } = req.params;
       const requestingUser = await usuarios.findOne({
-        where: { id: requesting_user },
+        where: { idUsuario: requesting_user },  
       });
 
       if (userEmail) {
@@ -53,10 +53,10 @@ module.exports = {
   async updateUser(req, res) {
     try {
       const { requesting_user, id } = req.params;
-      const { nome, email, senha, ADM, DATANASC } = req.body;
-      const user = await usuarios.findOne({ where: { id } });
+      const { nome, email, CPF, ADM, DATANASC } = req.body;
+      const user = await usuarios.findOne({ where: { idUsuario: id } });
       const requestingUser = await usuarios.findOne({
-        where: { id: requesting_user },
+        where: { idUsuario: requesting_user },
       });
 
       if (requestingUser.ADM == true) {
@@ -65,8 +65,8 @@ module.exports = {
         } else {
           bcrypt.hash(senha, 10).then((hash) => {
             usuarios.update(
-              { nome: nome, email: email, senha: hash, ADM: ADM, DATANASC: DATANASC },
-              { where: { id: id } }
+              { nome: nome, email: email, CPF: CPF, ADM: ADM, DATANASC: DATANASC },
+              { where: { idUsuario: id } }
             );
             res.status(202).json({ message: "Usuário Alterado" });
           });
@@ -83,15 +83,15 @@ module.exports = {
     try {
       const { requesting_user, id } = req.params;
       const requestingUser = await usuarios.findOne({
-        where: { id: requesting_user },
+        where: { idUsuario: requesting_user },
       });
-      const user = await usuarios.findOne({ where: { id: id } });
+      const user = await usuarios.findOne({ where: { idUsuario: id } });
 
       if (requestingUser.ADM == true) {
         if (!user) {
           res.json({ message: "Usuário não existe" });
         } else {
-          usuarios.destroy({ where: { id: id } });
+          usuarios.destroy({ where: { idUsuario: id } });
           res.status(200).json({ message: "Usuário excluído" });
         }
       } else {
@@ -132,6 +132,7 @@ module.exports = {
           process.env.SECRET
         );
         res.json({
+          idUsuario: user.idUsuario,
           token: accessToken,
           nome: user.nome,
           email: email,

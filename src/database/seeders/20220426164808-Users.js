@@ -10,16 +10,15 @@ module.exports = {
      *
      * Example: */
     await queryInterface.bulkInsert(
-      "users",
+      "usuarios",
       [
         {
-          name: "adm",
-          email: "adm",
-          password: hash,
-          cpf: "00000000000",
-          adm: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          nome: "adm",
+          email: "adm@gmail.com",
+          senha: hash,
+          CPF: "111.222.333-32",
+          ADM: true,
+          DATANASC: "2002-11-25"
         },
       ],
       {}
