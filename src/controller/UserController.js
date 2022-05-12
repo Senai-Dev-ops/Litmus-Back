@@ -63,13 +63,13 @@ module.exports = {
         if (!user) {
           res.status(400).json({ message: "Nenhum usuário encontrado" });
         } else {
-          bcrypt.hash(senha, 10).then((hash) => {
+          // bcrypt.hash(senha, 10).then((hash) => {
             usuarios.update(
               { nome: nome, email: email, CPF: CPF, ADM: ADM, DATANASC: DATANASC },
               { where: { idUsuario: id } }
             );
             res.status(202).json({ message: "Usuário Alterado" });
-          });
+          // });
         }
       } else {
         res.status(401).json({ message: "Não permitido" });
