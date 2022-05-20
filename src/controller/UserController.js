@@ -58,22 +58,32 @@ module.exports = {
       const userCPF = await usuarios.findOne({ where: { CPF } });
       const userEmail = await usuarios.findOne({ where: { email } });
 
+      // console.log("USUARIO: ", user.dataValues)
+      // console.log("USUARIO_CPF: ", userCPF.dataValues)
+      // console.log("USUARIO_EMAIL: ", userEmail.dataValues)
+
       const requestingUser = await usuarios.findOne({
         where: { idUsuario: requesting_user },
       });
 
       if (requestingUser.ADM == true) {
         if (!user) {
-          res.status(400).json({ message: "Nenhum usuário encontrado" });
+          res.status(400).json({ error: "Nenhum usuário encontrado" });
         } else {
-          if (userEmail) {
-            res.status(400).json({ message: "Já existe um usuário com este email" });
-            return;
+          if (userEmail != null) {
+            if (userEmail.dataValues.idUsuario != user.dataValues.idUsuario) {
+              res.status(400).json({ error: "Já existe um usuário com este email" });
+              return;
+            }
           }
-          if (userCPF) {
-            res.status(400).json({ message: "Já existe um usuário com este CPF" });
-            return;
+
+          if (userCPF != null) {
+            if (userCPF.dataValues.idUsuario != user.dataValues.idUsuario) {
+              res.status(400).json({ error: "Já existe um usuário com este CPF" });
+              return;
+            }
           }
+
 
           usuarios.update(
             { nome: nome, email: email, CPF: CPF, ADM: ADM, DATANASC: DATANASC },
@@ -82,7 +92,7 @@ module.exports = {
           res.status(202).json({ message: "Usuário Alterado" });
         }
       } else {
-        res.status(401).json({ message: "Não permitido" });
+        res.status(401).json({ error: "Não permitido" });
       }
     } catch (error) {
       res.status(400).json({ error: `${error}` });
