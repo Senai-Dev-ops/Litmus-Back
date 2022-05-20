@@ -13,7 +13,7 @@ module.exports = {
 
       const { requesting_user } = req.params;
       const requestingUser = await usuarios.findOne({
-        where: { idUsuario: requesting_user },  
+        where: { idUsuario: requesting_user },
       });
 
       if (userEmail) {
@@ -55,6 +55,9 @@ module.exports = {
       const { requesting_user, id } = req.params;
       const { nome, email, CPF, ADM, DATANASC } = req.body;
       const user = await usuarios.findOne({ where: { idUsuario: id } });
+      const userCPF = await usuarios.findOne({ where: { CPF } });
+      const userEmail = await usuarios.findOne({ where: { email } });
+
       const requestingUser = await usuarios.findOne({
         where: { idUsuario: requesting_user },
       });
@@ -63,13 +66,20 @@ module.exports = {
         if (!user) {
           res.status(400).json({ message: "Nenhum usuário encontrado" });
         } else {
-          // bcrypt.hash(senha, 10).then((hash) => {
-            usuarios.update(
-              { nome: nome, email: email, CPF: CPF, ADM: ADM, DATANASC: DATANASC },
-              { where: { idUsuario: id } }
-            );
-            res.status(202).json({ message: "Usuário Alterado" });
-          // });
+          if (userEmail) {
+            res.status(400).json({ message: "Já existe um usuário com este email" });
+            return;
+          }
+          if (userCPF) {
+            res.status(400).json({ message: "Já existe um usuário com este CPF" });
+            return;
+          }
+
+          usuarios.update(
+            { nome: nome, email: email, CPF: CPF, ADM: ADM, DATANASC: DATANASC },
+            { where: { idUsuario: id } }
+          );
+          res.status(202).json({ message: "Usuário Alterado" });
         }
       } else {
         res.status(401).json({ message: "Não permitido" });
