@@ -2,10 +2,10 @@ require("dotenv").config();
 
 module.exports = {
   development: {
-    username: "DBA",
+    username: "dba",
     password: "senai@115",
     database: "usuario",
-    host: "10.105.75.23",
+    host: "172.16.3.29",
     port: "808",
     dialect: "mysql",
   },

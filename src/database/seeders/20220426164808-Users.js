@@ -10,16 +10,15 @@ module.exports = {
      *
      * Example: */
     await queryInterface.bulkInsert(
-      "users",
+      "usuarios",
       [
         {
-          name: "adm",
-          email: "adm",
-          password: hash,
-          cpf: "00000000000",
-          adm: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          nome: "adm",
+          email: "adm@gmail.com",
+          senha: hash,
+          CPF: "00000000000",
+          ADM: true,
+          DATANASC: "2002-11-25 00:00:00"
         },
       ],
       {}
@@ -31,6 +30,6 @@ module.exports = {
      * Add commands to revert seed here.
      *
      * Example:*/
-    await queryInterface.bulkDelete("users", null, {});
+    await queryInterface.bulkDelete("usuarios", null, {});
   },
 };

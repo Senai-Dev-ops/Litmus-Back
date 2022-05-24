@@ -7,7 +7,7 @@ const { sign } = require("jsonwebtoken");
 module.exports = {
   async createUser(req, res) {
     try {
-      const { nome, email, senha, CPF, ADM } = req.body;
+      const { nome, email, senha, CPF, ADM, DATANASC } = req.body;
       const userEmail = await usuarios.findOne({ where: { email } });
       const userCPF = await usuarios.findOne({ where: { CPF } });
 
@@ -123,7 +123,7 @@ module.exports = {
 
       bcrypt.compare(senha, user.senha).then((match) => {
         if (!match) {
-          res.json({ error: "Usuário ou senha errados" });
+          res.status(400).json({ error: "Usuário ou senha errados" });
           return;
         }
 
