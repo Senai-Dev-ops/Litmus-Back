@@ -19,15 +19,15 @@ module.exports = {
       if (userEmail) {
         res
           .status(400)
-          .json({ message: "Já existe um usuário com este email" });
+          .json({ error: "Já existe um usuário com este email" });
         return;
       }
       if (userCPF) {
-        res.status(400).json({ message: "Já existe um usuário com este CPF" });
+        res.status(400).json({ error: "Já existe um usuário com este CPF" });
         return;
       }
       if (nome === "" || email === "" || senha === "" || CPF === "" || DATANASC === "") {
-        res.status(400).json({ message: "Campos não podem ser nulos" });
+        res.status(400).json({ error: "Campos não podem ser nulos" });
         return;
       }
       if (requestingUser.ADM) {
@@ -43,7 +43,7 @@ module.exports = {
           res.status(201).json({ message: "Usuário criado com sucesso" });
         });
       } else {
-        res.status(401).json({ message: "Não permitido" });
+        res.status(401).json({ error: "Não permitido" });
       }
     } catch (error) {
       res.status(400).json({ error: `${error}` });
@@ -57,10 +57,6 @@ module.exports = {
       const user = await usuarios.findOne({ where: { idUsuario: id } });
       const userCPF = await usuarios.findOne({ where: { CPF } });
       const userEmail = await usuarios.findOne({ where: { email } });
-
-      // console.log("USUARIO: ", user.dataValues)
-      // console.log("USUARIO_CPF: ", userCPF.dataValues)
-      // console.log("USUARIO_EMAIL: ", userEmail.dataValues)
 
       const requestingUser = await usuarios.findOne({
         where: { idUsuario: requesting_user },
