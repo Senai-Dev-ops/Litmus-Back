@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     senha: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(150),
       allowNull: false,
     },
     CPF: {
-      type: DataTypes.CHAR(11),
+      type: DataTypes.CHAR(14),
       unique: true,
       allowNull: false,
     },

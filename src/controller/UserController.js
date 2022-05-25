@@ -13,21 +13,21 @@ module.exports = {
 
       const { requesting_user } = req.params;
       const requestingUser = await usuarios.findOne({
-        where: { id: requesting_user },
+        where: { idUsuario: requesting_user },
       });
 
       if (userEmail) {
         res
           .status(400)
-          .json({ message: "Já existe um usuário com este email" });
+          .json({ error: "Já existe um usuário com este email" });
         return;
       }
       if (userCPF) {
-        res.status(400).json({ message: "Já existe um usuário com este CPF" });
+        res.status(400).json({ error: "Já existe um usuário com este CPF" });
         return;
       }
       if (nome === "" || email === "" || senha === "" || CPF === "" || DATANASC === "") {
-        res.status(400).json({ message: "Campos não podem ser nulos" });
+        res.status(400).json({ error: "Campos não podem ser nulos" });
         return;
       }
       if (requestingUser.ADM) {
@@ -43,7 +43,7 @@ module.exports = {
           res.status(201).json({ message: "Usuário criado com sucesso" });
         });
       } else {
-        res.status(401).json({ message: "Não permitido" });
+        res.status(401).json({ error: "Não permitido" });
       }
     } catch (error) {
       res.status(400).json({ error: `${error}` });
@@ -53,26 +53,42 @@ module.exports = {
   async updateUser(req, res) {
     try {
       const { requesting_user, id } = req.params;
-      const { nome, email, senha, ADM, DATANASC } = req.body;
-      const user = await usuarios.findOne({ where: { id } });
+      const { nome, email, CPF, ADM, DATANASC } = req.body;
+      const user = await usuarios.findOne({ where: { idUsuario: id } });
+      const userCPF = await usuarios.findOne({ where: { CPF } });
+      const userEmail = await usuarios.findOne({ where: { email } });
+
       const requestingUser = await usuarios.findOne({
-        where: { id: requesting_user },
+        where: { idUsuario: requesting_user },
       });
 
       if (requestingUser.ADM == true) {
         if (!user) {
-          res.status(400).json({ message: "Nenhum usuário encontrado" });
+          res.status(400).json({ error: "Nenhum usuário encontrado" });
         } else {
-          bcrypt.hash(senha, 10).then((hash) => {
-            usuarios.update(
-              { nome: nome, email: email, senha: hash, ADM: ADM, DATANASC: DATANASC },
-              { where: { id: id } }
-            );
-            res.status(202).json({ message: "Usuário Alterado" });
-          });
+          if (userEmail != null) {
+            if (userEmail.dataValues.idUsuario != user.dataValues.idUsuario) {
+              res.status(400).json({ error: "Já existe um usuário com este email" });
+              return;
+            }
+          }
+
+          if (userCPF != null) {
+            if (userCPF.dataValues.idUsuario != user.dataValues.idUsuario) {
+              res.status(400).json({ error: "Já existe um usuário com este CPF" });
+              return;
+            }
+          }
+
+
+          usuarios.update(
+            { nome: nome, email: email, CPF: CPF, ADM: ADM, DATANASC: DATANASC },
+            { where: { idUsuario: id } }
+          );
+          res.status(202).json({ message: "Usuário Alterado" });
         }
       } else {
-        res.status(401).json({ message: "Não permitido" });
+        res.status(401).json({ error: "Não permitido" });
       }
     } catch (error) {
       res.status(400).json({ error: `${error}` });
@@ -83,15 +99,15 @@ module.exports = {
     try {
       const { requesting_user, id } = req.params;
       const requestingUser = await usuarios.findOne({
-        where: { id: requesting_user },
+        where: { idUsuario: requesting_user },
       });
-      const user = await usuarios.findOne({ where: { id: id } });
+      const user = await usuarios.findOne({ where: { idUsuario: id } });
 
       if (requestingUser.ADM == true) {
         if (!user) {
           res.json({ message: "Usuário não existe" });
         } else {
-          usuarios.destroy({ where: { id: id } });
+          usuarios.destroy({ where: { idUsuario: id } });
           res.status(200).json({ message: "Usuário excluído" });
         }
       } else {
@@ -123,7 +139,7 @@ module.exports = {
 
       bcrypt.compare(senha, user.senha).then((match) => {
         if (!match) {
-          res.status(400).json({ error: "Usuário ou senha errados" });
+          res.json({ error: "Usuário ou senha errados" });
           return;
         }
 
@@ -132,6 +148,7 @@ module.exports = {
           process.env.SECRET
         );
         res.json({
+          idUsuario: user.idUsuario,
           token: accessToken,
           nome: user.nome,
           email: email,

@@ -16,9 +16,9 @@ module.exports = {
           nome: "adm",
           email: "adm@gmail.com",
           senha: hash,
-          CPF: "00000000000",
+          CPF: "111.222.333-32",
           ADM: true,
-          DATANASC: "2002-11-25 00:00:00"
+          DATANASC: "2002-11-25"
         },
       ],
       {}
