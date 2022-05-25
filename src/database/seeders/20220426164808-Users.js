@@ -1,8 +1,9 @@
 "use strict";
 require("dotenv").config();
 const bcrypt = require("bcrypt");
+const pass = process.env.DEFAULT_USER_PASS;
 
-const hash = bcrypt.hashSync(process.env.DEFAULT_USER_PASS, 10);
+const hash = bcrypt.hashSync(pass, 10);
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**

@@ -6,7 +6,7 @@ const validateToken = (req, res, next) => {
   const accessToken = req.header("accessToken");
 
   if (!accessToken) {
-    return res.json({ error: "Usuário não fez o login" });
+    return res.status(400).json({ error: "Usuário não fez o login" });
   }
 
   try {

@@ -80,7 +80,6 @@ module.exports = {
             }
           }
 
-
           usuarios.update(
             { nome: nome, email: email, CPF: CPF, ADM: ADM, DATANASC: DATANASC },
             { where: { idUsuario: id } }
