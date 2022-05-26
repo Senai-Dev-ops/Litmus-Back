@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "start": "node src/index.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -15,7 +15,6 @@
     "global": "^4.4.0",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
-    "nodemon": "^2.0.15",
     "sequelize": "^6.17.0",
     "sequelize-cli": "^6.4.1"
   }

@@ -13,11 +13,11 @@ module.exports = {
         allowNull: false,
       },
       senha: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(150),
         allowNull: false,
       },
       CPF: {
-        type: DataTypes.CHAR(11),
+        type: DataTypes.CHAR(14),
         unique: true,
         allowNull: false,
       },

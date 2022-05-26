@@ -9,6 +9,15 @@ module.exports = {
         res.status(401).json({ message: "Não há informções da máquina" });
       }
       res.status(200).json({ infos });
-    } catch (error) {}
+    } catch (error) { }
+  },
+
+  async statusMaquina(req, res) {
+    try {
+      const { status } = req.params;
+
+    } catch (error) {
+
+    }
   },
 };
