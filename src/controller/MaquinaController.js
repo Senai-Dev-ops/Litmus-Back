@@ -6,7 +6,9 @@ const createDataClass = new CreateData();
 module.exports = {
   async maquinaList(req, res) {
     try {
-      const infos = await Maquina.findAll({limit: 100});
+      const infos = await Maquina.findAndCountAll({
+        limit: 100
+      });
 
       if (!infos) {
         res.status(401).json({ message: "Não há informções da máquina" });

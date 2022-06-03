@@ -43,7 +43,7 @@ module.exports = class CreateData {
     while (true) {
       inter = setInterval(() => {
         this.gerar();
-      }, 2000);
+      }, 20000);
     }
   }
 
