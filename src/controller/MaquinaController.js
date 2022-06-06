@@ -14,9 +14,7 @@ module.exports = {
         res.status(401).json({ message: "Não há informções da máquina" });
       }
       res.status(200).json({ infos });
-    } catch (error) {
-      res.status(400).json({ error: `${error}` });
-    }
+    } catch (error) {}
   },
 
   async statusMaquina(req, res) {
@@ -31,9 +29,7 @@ module.exports = {
         createDataClass.stop()
       }
 
-    } catch (error) {
-      res.status(400).json({ error: `${error}` });
-    }
+    } catch (error) {}
   },
 
   async lastData(req, res) {
