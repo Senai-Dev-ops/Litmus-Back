@@ -8,7 +8,8 @@ const { validateToken } = require("../middlewares/middlewares");
 
 //Machine Methods
 router.get("/maquina-list", MaquinaController.maquinaList);
-router.post("/status/:status", MaquinaController.statusMaquina)
+router.post("/status/:status", MaquinaController.statusMaquina);
+router.get("/final-info", MaquinaController.lastData);
 
 //Users Methods
 router.get("/user-list", UserController.userList);

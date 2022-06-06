@@ -14,7 +14,9 @@ module.exports = {
         res.status(401).json({ message: "Não há informções da máquina" });
       }
       res.status(200).json({ infos });
-    } catch (error) {}
+    } catch (error) {
+      res.status(400).json({ error: `${error}` });
+    }
   },
 
   async statusMaquina(req, res) {
@@ -29,6 +31,25 @@ module.exports = {
         createDataClass.stop()
       }
 
-    } catch (error) {}
+    } catch (error) {
+      res.status(400).json({ error: `${error}` });
+    }
   },
+
+  async lastData(req, res) {
+    try {
+      const idItem = await Maquina.max('id')
+      console.log(idItem)
+      const fItem = await Maquina.findByPk(idItem)
+
+      if (!fItem) {
+        res.status(401).json({ message: "Último dado não encontrado!" });
+      }
+      
+      res.status(200).json({ fItem });
+
+    } catch (error) {
+      res.status(400).json({ error: `${error}` });
+    }
+  }
 };
