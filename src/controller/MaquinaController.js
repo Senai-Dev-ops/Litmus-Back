@@ -39,7 +39,7 @@ module.exports = {
   async lastData(req, res) {
     try {
       const idItem = await Maquina.max('id')
-      console.log(idItem)
+     
       const fItem = await Maquina.findByPk(idItem)
 
       if (!fItem) {
