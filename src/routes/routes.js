@@ -10,6 +10,7 @@ const { validateToken } = require("../middlewares/middlewares");
 router.get("/maquina-list", MaquinaController.maquinaList);
 router.post("/status/:status", MaquinaController.statusMaquina);
 router.get("/final-info", MaquinaController.lastData);
+router.get("/pdf-info", MaquinaController.pdfData);
 
 //Users Methods
 router.get("/user-list", UserController.userList);
