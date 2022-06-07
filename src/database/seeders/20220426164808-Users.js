@@ -14,12 +14,12 @@ module.exports = {
       "usuarios",
       [
         {
-          nome: "adm",
-          email: "adm@gmail.com",
+          nome: "Administrador",
+          email: "admin@senai.com",
           senha: hash,
-          CPF: "111.222.333-32",
+          CPF: "000.000.000-00",
           ADM: true,
-          DATANASC: "2002-11-25"
+          DATANASC: "2000-01-01"
         },
       ],
       {}

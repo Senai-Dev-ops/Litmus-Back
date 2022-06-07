@@ -32,7 +32,7 @@ module.exports = class CreateData {
   }
 
   gerar() {
-    if(this.check == false) return;
+    if (this.check == false) return;
 
     let valor = Math.floor(Math.random() * (100 - 1)) + 1;
     this.temporiza(valor);
@@ -40,11 +40,10 @@ module.exports = class CreateData {
 
   start() {
     this.check = true
-    while (true) {
-      inter = setInterval(() => {
-        this.gerar();
-      }, 20000);
-    }
+
+    setInterval(() => {
+      this.gerar();
+    }, 20000);
   }
 
   stop() {
